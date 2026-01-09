@@ -1,6 +1,6 @@
-# Contributing to Prompt Stack
+# Contributing to RUDI
 
-Thank you for your interest in contributing to Prompt Stack. This document outlines the process for contributing code, stacks, and prompts.
+Thank you for your interest in contributing to RUDI. This document outlines the process for contributing code, stacks, and prompts.
 
 ## Code of Conduct
 
@@ -19,39 +19,28 @@ We are committed to providing a welcoming and inclusive environment. Please be r
 ### Setup
 
 ```bash
-git clone https://github.com/your-username/prompt-stack.git
-cd prompt-stack
-npm install
+git clone https://github.com/your-username/cli.git
+cd cli
+pnpm install
 ```
 
 ### Style Guide
 
-- Use TypeScript for new code
-- Follow existing code style (use `npm run lint`)
-- Write meaningful variable and function names
-- Add comments for complex logic
+- Use ES modules (import/export)
+- No semicolons (project convention)
+- Use async/await for asynchronous code
+- Add JSDoc comments for public APIs
 
 ### Commits
 
-Use semantic commit messages:
+Use clear, descriptive commit messages:
 
 ```
-feat: Add new feature
-fix: Fix a bug
-refactor: Reorganize code
-docs: Update documentation
-test: Add or update tests
-chore: Maintenance tasks
-```
+Add support for Python runtime detection
 
-Example:
-
-```
-feat: Add pstack secrets command
-
-- Implement secrets set/list/remove commands
-- Add encryption for stored secrets
-- Update CLI documentation
+- Add detect.command support in resolver
+- Handle virtual environments
+- Add tests for Python path resolution
 ```
 
 ### Testing
@@ -69,73 +58,43 @@ All tests must pass before submission.
 ### Requirements
 
 - Clear, specific purpose
-- Valid `stack.yaml` manifest
-- Prompt file with clear instructions
-- Example usage with expected output
-- **CRITICAL: No hardcoded secrets, API keys, passwords, or credentials**
+- Valid `manifest.json` with required fields
+- MCP server implementation in `node/src/` or `python/src/`
+- No hardcoded secrets, API keys, passwords, or credentials
 
 ### Security Requirements
 
 Stacks MUST declare required secrets but NEVER include actual values:
 
-**❌ DO NOT DO THIS:**
-```yaml
-secrets:
-  - name: OPENAI_API_KEY
-    value: sk-abc123xyz789  # NEVER include actual keys!
+```json
+{
+  "requires": {
+    "secrets": [
+      {
+        "name": "API_KEY",
+        "required": true,
+        "description": "Get yours at https://example.com/api-keys"
+      }
+    ]
+  }
+}
 ```
 
-**✅ DO THIS INSTEAD:**
-```yaml
-secrets:
-  - name: OPENAI_API_KEY
-    required: true
-    description: "OpenAI API key (get from https://platform.openai.com/api-keys)"
-```
-
-Users will provide their own key locally with `pstack secrets set OPENAI_API_KEY`.
+Users provide their own keys with `rudi secrets set API_KEY`.
 
 ### Directory Structure
 
 ```
-packages/stacks/your-stack/
-├── stack.yaml
-├── prompt.md
-├── example.input (optional)
-└── example.output (optional)
-```
-
-### Stack Manifest
-
-Minimal example:
-
-```yaml
-id: your-stack
-kind: stack
-name: Your Stack
-version: 1.0.0
-description: What this stack does
-
-requires:
-  runtimes: [node]
-
-inputs:
-  - name: input_file
-    type: path
-    required: true
-
-outputs:
-  - name: result
-    type: string
-
-entrypoint: process.js
+catalog/stacks/your-stack/
+├── manifest.json
+└── node/src/index.ts (or python/src/server.py)
 ```
 
 ### Submission Process
 
-1. Create directory under `packages/stacks/`
+1. Create directory under `catalog/stacks/`
 2. Include all required files
-3. Test locally: `pstack install ./packages/stacks/your-stack`
+3. Test locally with the RUDI CLI
 4. Open pull request with clear description
 
 ## Contributing Prompts
@@ -143,93 +102,34 @@ entrypoint: process.js
 ### Requirements
 
 - Clear, instructive content
-- Follows markdown formatting
-- Includes example inputs/outputs (if applicable)
-- No hardcoded values or API keys
+- YAML frontmatter with metadata
+- Example inputs/outputs (if applicable)
 
 ### File Structure
 
 ```
-packages/prompts/your-prompt/
-└── prompt.md
+catalog/prompts/your-prompt.md
 ```
 
 ### Submission Process
 
-1. Create directory under `packages/prompts/`
-2. Include `prompt.md` file
+1. Create file under `catalog/prompts/`
+2. Include YAML frontmatter
 3. Open pull request
 
 ## Pull Request Process
 
-1. Update relevant READMEs
+1. Update relevant documentation
 2. Add tests for new functionality
-3. Ensure all tests pass: `npm test`
-4. Ensure code is linted: `npm run lint`
-5. Write clear PR description (what, why, how)
-6. Reference any related issues
-
-### PR Description Template
-
-```markdown
-## What
-Brief description of changes
-
-## Why
-Motivation for these changes
-
-## How
-Technical approach taken
-
-## Testing
-How to test these changes
-
-## Checklist
-- [ ] Tests pass
-- [ ] Code is linted
-- [ ] Documentation updated
-- [ ] No secrets or sensitive data included
-```
+3. Ensure all tests pass
+4. Write clear PR description (what, why, how)
+5. Reference any related issues
 
 ## Review Process
 
 - At least one maintainer review required
 - Address feedback promptly
-- Be respectful of reviewer comments
 - Updates may be requested before merge
-
-## Running Tests
-
-```bash
-# All tests
-npm test
-
-# Single package
-npm test -- --filter=@prompt-stack/core
-
-# Watch mode
-npm test -- --watch
-```
-
-## Linting
-
-```bash
-# Check code style
-npm run lint
-
-# Fix issues automatically
-npm run lint -- --fix
-```
-
-## Building
-
-```bash
-# Build all packages
-npm run build
-
-# Build single package
-npm run build -- --filter=@prompt-stack/core
-```
 
 ## Questions?
 
@@ -240,13 +140,3 @@ npm run build -- --filter=@prompt-stack/core
 ## License
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
-
-## Recognition
-
-Contributors are recognized in:
-
-- Repository CONTRIBUTORS file
-- Release notes for significant contributions
-- GitHub "contributors" page
-
-Thank you for making Prompt Stack better!

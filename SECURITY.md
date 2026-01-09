@@ -1,8 +1,15 @@
 # Security Policy
 
+## Supported Versions
+
+| Version | Supported          |
+| ------- | ------------------ |
+| 1.x.x   | Yes                |
+| < 1.0   | No                 |
+
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Prompt Stack, please do not open a public issue. Instead, email security@prompt-stack.dev with:
+If you discover a security vulnerability in RUDI, please do not open a public issue. Instead, contact the maintainers directly with:
 
 - Description of the vulnerability
 - Steps to reproduce
@@ -11,14 +18,41 @@ If you discover a security vulnerability in Prompt Stack, please do not open a p
 
 We will respond within 48 hours and work with you on a fix.
 
+## Security Model
+
+### Secret Storage
+
+RUDI stores secrets in `~/.rudi/secrets.json` with file permissions `0600` (owner read/write only). This follows the same security model used by:
+
+- SSH (`~/.ssh/`)
+- AWS CLI (`~/.aws/credentials`)
+- GitHub CLI (`~/.config/gh/`)
+
+Secrets are:
+- Never written to agent configuration files
+- Never exposed in process listings
+- Never logged or transmitted
+- Injected as environment variables only at runtime
+
+### npm Package Installation
+
+By default, RUDI installs npm packages with `--ignore-scripts` to prevent arbitrary code execution during installation. Users must explicitly opt-in with `--allow-scripts` for packages that require lifecycle scripts.
+
+### Shim Isolation
+
+Each package installs to its own isolated directory. Shims are thin wrapper scripts that:
+- Set up the correct environment
+- Delegate to the actual binary
+- Prevent packages from interfering with each other
+
 ## Security Best Practices
 
 ### For Users
 
-- **Keep Prompt Stack updated** - Download the latest release from [Releases](https://github.com/prompt-stack/releases)
-- **Manage secrets carefully** - Secrets are stored locally; protect your `~/.prompt-stack/secrets.json`
-- **Review stacks before running** - Understand what code you're executing
-- **Use strong authentication** - Protect access to your API keys and credentials
+- **Keep RUDI updated** - Run `npm update -g @learnrudi/cli` regularly
+- **Review packages before installing** - Check the registry for package details
+- **Protect your secrets file** - Ensure `~/.rudi/secrets.json` has mode 0600
+- **Use --allow-scripts sparingly** - Only enable scripts for trusted packages
 
 ### For Contributors
 
@@ -26,60 +60,29 @@ We will respond within 48 hours and work with you on a fix.
 - **Validate inputs** - Always validate user input before processing
 - **Use secure libraries** - Keep dependencies updated
 - **Avoid shell injection** - Use safe APIs for command execution
-- **Encrypt sensitive data** - Use encryption for secrets at rest
 
-## Security Features
+## Registry Security
 
-### Secrets Management
+The registry must never contain API keys, tokens, or credentials. All secrets are:
 
-- Secrets are stored locally in `~/.prompt-stack/secrets.json`
-- Can be encrypted using OS keychain (macOS, Windows)
-- Never sent to servers (local-first design)
-- Stacks declare what secrets they need; users provide values
-
-### Session Management
-
-- All execution sessions are logged to local SQLite database
-- Session history is stored locally, never uploaded
-- Full audit trail of who ran what, when, with which inputs
-
-### Runtime Isolation
-
-- Stacks run with explicit runtime dependencies declared
-- Lockfiles ensure reproducible execution environments
-- No automatic downloads or execution of untrusted code
-
-## Known Limitations
-
-- **No code signing** (planned for future releases)
-- **No sandboxing** for stack execution (runs with user privileges)
-- **Windows support** not yet available
+- Declared in stack manifests under `requires.secrets`
+- Stored locally by users
+- Injected at runtime by the RUDI CLI
 
 ## Responsible Disclosure
 
 We appreciate security researchers who responsibly disclose vulnerabilities. Please:
 
-1. Report via email (not GitHub issues)
+1. Report directly to maintainers (not GitHub issues)
 2. Give us time to fix (30 days minimum)
 3. Don't publicly disclose until we release a fix
 4. Provide clear reproduction steps
 
-## Security Updates
+## Scope
 
-Security updates are released as patches. Subscribe to releases at:
+This security policy covers:
+- The RUDI CLI (`@learnrudi/cli`)
+- The official package registry (`learn-rudi/registry`)
+- Associated npm packages (`@learnrudi/*`)
 
-https://github.com/prompt-stack/releases
-
-## Third-Party Security
-
-Prompt Stack depends on several open-source projects. We keep these updated regularly. Report third-party vulnerabilities to their respective projects.
-
-## Legal
-
-- We do not warrant the security of Prompt Stack
-- Use at your own risk
-- Follow your organization's security policies
-
-## Questions?
-
-For security questions, email security@prompt-stack.dev
+Third-party MCP stacks have their own security policies.
