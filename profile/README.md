@@ -1,82 +1,65 @@
 # RUDI
 
-Universal tool manager for MCP stacks, CLI tools, runtimes, and AI coding agents.
+**Responsible Use of Digital Intelligence**
 
-RUDI provides a single interface to install, configure, and run Model Context Protocol (MCP) servers with Claude, Codex, Gemini, and other AI agents.
+RUDI is an education platform teaching people how to use AI responsibly. We provide certification programs, hands-on tools, and practical training for working with AI agents, MCP servers, and automated workflows.
 
-## What RUDI Does
+## Certification Levels
 
-- **Install MCP stacks** - Add tools like Slack, Notion, Google Workspace to your AI agents
-- **Manage runtimes** - Install Node.js, Python, Deno, Bun without system-wide changes
-- **Handle secrets** - Secure credential storage with automatic injection
-- **Integrate agents** - Configure Claude, Codex, and Gemini with one command
+| Level | Focus | Skills |
+|-------|-------|--------|
+| **Level 1** | AI Literacy | Foundation concepts, applications, responsible use |
+| **Level 2** | Applied AI | Hands-on practice with real AI tools |
+| **Level 3** | AI Agents & Workflows | Building with Claude, Codex, Gemini, MCP servers |
 
-## Getting Started
+## Learning Tools
+
+The RUDI CLI helps learners practice with AI agents and MCP stacks:
 
 ```bash
 npm install -g @learnrudi/cli
 
-# Search the registry
+# Search available tools
 rudi search slack
 
-# Install a stack
+# Install an MCP stack
 rudi install slack
 
-# Set required secrets
+# Configure secrets
 rudi secrets set SLACK_BOT_TOKEN
 
 # Integrate with Claude
 rudi integrate claude
 ```
 
-## The Ecosystem
+## Repositories
 
-| Repository | Purpose |
-|------------|---------|
-| [**cli**](https://github.com/learn-rudi/cli) | Command-line tool manager |
-| [**registry**](https://github.com/learn-rudi/registry) | Official package registry |
+| Repository | Description |
+|------------|-------------|
+| [**rudi**](https://github.com/learn-rudi/rudi) | Main website - learnrudi.com |
+| [**cli**](https://github.com/learn-rudi/cli) | Command-line tool for managing AI stacks |
+| [**registry**](https://github.com/learn-rudi/registry) | Package registry for MCP stacks and tools |
 | [**studio**](https://github.com/learn-rudi/studio) | Desktop application |
 
-## Available Packages
+## What You Can Learn
 
-**MCP Stacks:** slack, notion-workspace, google-workspace, google-ai, openai, whisper, video-editor, content-extractor, postgres, sqlite, and more
+**MCP Stacks:** slack, notion-workspace, google-workspace, google-ai, openai, whisper, video-editor, content-extractor, postgres, sqlite
 
 **Runtimes:** node, python, deno, bun, ollama
 
-**Agents:** claude, codex, gemini, copilot
+**AI Agents:** claude, codex, gemini, copilot
 
-## How It Works
+## Get Certified
 
-```
-rudi install slack
-     │
-     ├─► Downloads stack from registry
-     ├─► Installs dependencies
-     └─► Creates shim in ~/.rudi/bin/
-
-rudi secrets set SLACK_BOT_TOKEN
-     │
-     └─► Stores in ~/.rudi/secrets.json (mode 0600)
-
-rudi integrate claude
-     │
-     └─► Updates Claude config with MCP server entry
-```
-
-## Documentation
-
-- [CLI Documentation](https://github.com/learn-rudi/cli) - Installation and command reference
-- [Registry](https://github.com/learn-rudi/registry) - Available packages and contribution guide
-- [Creating Stacks](https://github.com/learn-rudi/registry#creating-a-stack) - Build your own MCP servers
+Visit [learnrudi.com](https://www.learnrudi.com) to:
+- Take the AI Literacy survey
+- Explore certification paths (Business or Education)
+- Access learning resources
+- Connect with partners
 
 ## Contributing
 
-Contributions welcome:
-
-- **New stacks or prompts**: [registry](https://github.com/learn-rudi/registry)
-- **CLI improvements**: [cli](https://github.com/learn-rudi/cli)
-
-See CONTRIBUTING.md in each repository.
+Contributions welcome in all repositories. See CONTRIBUTING.md in each repo for guidelines.
 
 ## License
 
